@@ -1,5 +1,8 @@
 $(document).ready(function () {
 
+  //AJAX GET POSTS
+    // -> render posts dynamical
+      // -> attach onclick
  let replyMode = false;
 
  $("#submit-post").on("click", () => {
@@ -20,9 +23,9 @@ $(document).ready(function () {
      <h3 class="post-msg-sub">${subject}</h3>
      <p class="post-msg">${message}</p>
      <p class="text-center username subject mt-1 mb-2">${username} | ${timeStamp}
-       <span class="rec ml-2" id="rec-button">Rec</span>
-       <span class="reply ml-2" id="reply-button">Reply</span>
-       <span class="view ml-2" id="view-button" data-toggle="modal" data-target=".bd-example-modal-lg">View Replies</span>
+       <span class="rec ml-2 rec-button">Rec</span>
+       <span class="reply ml-2 reply-button">Reply</span>
+       <span class="view ml-2 view-button" data-toggle="modal" data-target=".bd-example-modal-lg">View Replies</span>
      </p>
    </div>
  </div>
@@ -67,7 +70,7 @@ replyMode = false;
   $("#post-command").text("Add a Reply")
 })
 
- $(document).on("click", "#view-button", () => {
+ $('#view-button').on("click", () => {
 
   replyMode = false;
   console.log($(this))

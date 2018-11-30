@@ -14,7 +14,11 @@
   <link rel="stylesheet" href="./css/style.css">
 
   <title>Fan Chat</title>
-
+  <style>
+    #messageArea{
+      display: none;
+    }
+    </style>
 </head>
 
 <body>
@@ -96,32 +100,50 @@
   <hr class="secondary-hr">
   <hr class="white-hr">
 
-  <div class="container chat">
+   <!-- begin username area -->
+   <div class="container-for-chat">
+    <div class="container">
+       <div id="userFormArea" class="row">
+         <div class="col-md-12">
+           <form id="userForm">
+             <div class="form-group">
+               <label>Enter Username:</label>
+               <input class="form-control" id="username">
+               <br />
+               <input type="submit" class="btn btn-primary" value="Login">
+   
+             </div>
+         </div>
+         </form>
+       </div>
+     </div>
+   
+     <!-- end username area -->
+   
+     <div id="messageArea" class="row">
+       <div class="col-md-4">
+         <div class="bg-light">
+           <h3> Online Users</h3>
+           <ul class="list-group" id="users"></ul>
+         </div>
+       </div>
+   
+       <!-- begin chat enter area -->
+       <div class="col-md-8">
+         <div class="chat" id="chat"></div>
+         <form id="messageForm">
+           <div class="form-group">
+             <label>Enter Message:</label>
+             <textarea class="form-control" id="message"></textarea>
+             <br />
+             <input type="submit" class="btn btn-primary" value="Send Message">
+   
+           </div>
+         </form>
+       </div>
+     </div>
 
-    <div class="row align-items-center mb-3">
-      <div class="chat-container p-2">
-
-        <h2 class="text-center mb-3 mt-3">SCORECENTER FAN CHAT</h2>
-
-        <div class="chat-div"></div>
-
-        <div class="message-div mt-2">
-          <textarea class="chat-textarea" maxlength="500" placeholder="Enter message text here." id="text-message" required></textarea>
-          
-        </div>
-        <div class="row align-items-center">
-        <div class="col-6">
-            <button type="button" class="btn btn-primary btn-sm chat-submit p-2 mt-2" id="submit-chat">Submit</button>
-          </div>
-          <div class="col-6">
-            <button type="button" class="btn btn-primary btn-sm chat-clear p-2 mt-2" id="clear-chat">Clear</button>
-          </div>
-        </div>
-      </div>
-
-      </div>
-  </div>
-
+      
 
   <hr class="white-hr">
   <hr class="secondary-hr">
@@ -135,13 +157,74 @@
     </div>
   </footer>
 
-
   <script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/moment.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script> -->
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script src="/js/fanchat.js"></script>
 
+  <script>
+    $(function () {
+      var socket = io.connect('localhost:3000');
+      var $messageForm = $('#messageForm');
+      var $message = $('#message');
+      var $chat = $('#chat');
+      var $messageArea = $('#messageArea');
+      var $userFormArea = $('#userFormArea');
+      var $userForm = $('#userForm');
+      var $users = $('#users');
+      var $username = $('#username');
+
+      var $messageForm = $('#messageForm'); // this is the <form> that contains the <div> that holds onto the area where text is entered & it's <label>
+      var $message = $('#message'); // <textarea> that is used to type into chat
+      var $chat = $('#chat'); // where the entered text gets displayed for users to see
+      var $messageArea = $('#messageArea'); // the <div> that encompasses all the divs/forms/labels/textareas that have to do with the chat room. THIS DOES NOT INCLUDE THE USERNAME INSERT AREA.
+      var $userFormArea = $('#userFormArea'); // the <row> encompassing the col-md-12
+      var $userForm = $('#userForm'); // this is for the username
+      var $users = $('#users'); // where online users are displayed
+      var $username = $('#username'); // where the user enters their username for the chatroom
+
+
+
+
+
+
+
+
+      
+
+      $messageForm.submit(function (e) {
+        e.preventDefault();
+        socket.emit('send message', $message.val());
+        $message.val('');
+      });
+
+      socket.on('new message', function (data) {
+        $chat.append('<div class="bg-light"><strong>' + data.user + '</strong>:' + data.msg + '</div>');
+      });
+
+      $userForm.submit(function (e) {
+        e.preventDefault();
+        socket.emit('new user', $username.val(), function (data) {
+          if (data) {
+            $userFormArea.hide();
+            $messageArea.show();
+          }
+        });
+        $username.val('');
+      });
+
+      socket.on('get users', function (data) {
+        var html = '';
+        for (var i = 0; i < data.length; i++) {
+          html += '<li class="list-group-item">' + data[i] + '</li>';
+        }
+        $users.html(html);
+      })
+
+    });
+  </script>
 </body>
 
 </html>

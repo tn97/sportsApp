@@ -9,13 +9,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "datatables.net": "^1.10.19",
     "datatables.net-dt": "^1.10.19",
+    "dotenv": "^6.1.0",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "jquery": "^3.3.1",
     "mysportsfeeds-node": "^2.0.1",
+    "mysql2": "^1.6.4",
     "newsapi": "^2.4.0",
     "nfl_scores": "^0.1.0",
-    "node-nfl-api": "^1.0.3"
+    "node-nfl-api": "^1.0.3",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "sequelize": "^4.41.2",
+    "socket.io": "^2.2.0"
   }
 }
