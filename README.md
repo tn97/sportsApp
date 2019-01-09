@@ -16,12 +16,12 @@ https://scorecenterexpress.herokuapp.com/
 
 ## Technologies Used
 * Node.js
+* JavaScript
+* JQuery
 * socket.io
-* express
-* sequelize
+* Express
+* MySQL
+* Sequelize
 * NewsAPI
 * MySportsFeed API
-* Sequel Pro
-* Terminal
-* Heroku
 * datatables.net
